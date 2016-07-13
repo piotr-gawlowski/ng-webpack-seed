@@ -123,24 +123,20 @@ const modulize = (content, module) => {
   const imports = `\nimport './${yargs.argv.name}/${module}';`;
   const moduleDef = `  'app.${module}',`;
   
-  let whole = start + imports + previous + moduleDef +  '\n' + end;
-
-  console.log(whole);
-
-  return content;
+  return start + imports + previous + moduleDef +  '\n' + end;
 };
 
 gulp.task('component', () => {
-  var proto = yargs.argv.name.split('/');
+  let proto = yargs.argv.name.split('/');
   const name = _.last(proto);
-
   const destPath = path.join(resolveToComponents(), yargs.argv.name);
 
-  gulp.src(path.join(resolveToComponents(), 'index.js'))
+  gulp.src(path.join(resolveToComponents(), 'index.js'), {base: './'})
     .pipe(change((content) => {
         return modulize(content, name);
     }))
-    .pipe(gulp.dest(path.join(resolveToComponents(), 'index.js')));
+    .pipe(gulp.dest('./'));
+
 
   return gulp.src(paths.blankComponent)
     .pipe(template({
@@ -152,11 +148,43 @@ gulp.task('component', () => {
       path.basename = path.basename.replace('temp', name);
     }))
     .pipe(gulp.dest(destPath));
+    
+});
+
+gulp.task('route', () => {
+  let proto = yargs.argv.name.split('/');
+  const name = _.last(proto);
+  const destPath = path.join(resolveToRoutes(), yargs.argv.name);
+
+  gulp.src(path.join(resolveToRoutes(), 'index.js'), {base: './'})
+    .pipe(change((content) => {
+        return modulize(content, name);
+    }))
+    .pipe(gulp.dest('./'));
+
+
+  return gulp.src(paths.blankComponent)
+    .pipe(template({
+      name: name,
+      APP: 'app',
+      upCaseName: cap(name)
+    }))
+    .pipe(rename((path) => {
+      path.basename = path.basename.replace('temp', name);
+    }))
+    .pipe(gulp.dest(destPath));
+    
 });
 
 gulp.task('service', () => {
   const name = yargs.argv.name;
   const destPath = resolveToServices();
+
+    gulp.src(path.join(resolveToServices(), 'index.js'), {base: './'})
+    .pipe(change((content) => {
+        return modulize(content, name);
+    }))
+    .pipe(gulp.dest('./'));
 
   return gulp.src(paths.blankService)
     .pipe(template({
