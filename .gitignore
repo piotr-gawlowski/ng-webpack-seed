@@ -1,0 +1,11 @@
+.DS_Store
+.tmp
+.git
+node_modules
+.settings
+semantic
+semantic.json
+*.log
+dist/
+.idea
+client/lib

@@ -1,0 +1,44 @@
+@import "../constants";
+
+.ui.button {
+  border-radius: 2px;
+  &.white {
+    background: #fff;
+    color: #222;
+  }
+  &.blue {
+    background: $blue-royal;
+    &:hover {
+      background: darken($blue-royal, 5%);
+    }
+  }
+}
+
+.ui.input > input.transparent {
+  text-align: center;
+  background: none;
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px solid rgba(255,255,255, 0.5);
+  transition: border-color $timing-short ease;
+  color: #fff;
+  padding: 10px;
+  margin: 15px 0;
+
+  &:focus {
+    border-color: rgba(255,255,255, 0.8);
+  }
+
+  &::-webkit-input-placeholder {
+    color:    rgba(255,255,255, 0.5)
+  }
+  &:-moz-placeholder {
+    color:    rgba(255,255,255, 0.5)
+  }
+  &::-moz-placeholder {
+    color:    rgba(255,255,255, 0.5)
+  }
+  &:-ms-input-placeholder {
+    color:    rgba(255,255,255, 0.5)
+  }
+}
