@@ -12,10 +12,8 @@ $fa-font-path: "/fonts" !default;
 
 
 body {
-  background: $dark;
-  color: #fff;
-  //font-family: CentraleSansBook, sans-serif;
-  overflow-y: scroll;
+  background: #f4f4f4;
+  color: #222;
   &.noscroll {
     overflow: hidden;
   }

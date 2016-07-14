@@ -2,8 +2,7 @@ import angular from 'angular';
 import uiRouter from 'angular-ui-router';
 import ngCookies from 'angular-cookies';
 import ngAnimate from 'angular-animate';
-import ngTouch from 'angular-touch';
-import fileBase64 from 'angular-base64-upload';
+import ngMaterial from 'angular-material';
 import AppComponent from './app.component';
 
 //require modules
@@ -14,9 +13,8 @@ import './components'
 angular.module('app', [
     uiRouter,
     ngCookies,
-    ngTouch,
     ngAnimate,
-    fileBase64,
+    ngMaterial,
     'app.services',
     'app.routes',
     'app.components'

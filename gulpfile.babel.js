@@ -18,21 +18,22 @@ import webpachHotMiddelware from 'webpack-hot-middleware';
 import colorsSupported      from 'supports-color';
 import historyApiFallback   from 'connect-history-api-fallback';
 
+
 let root = 'client';
 
 // helper methods for resolving paths
-let resolveToApp = (glob = '') => {
+const resolveToApp = (glob = '') => {
   return path.join(root, 'app', glob); // app/{glob}
 };
 
-let resolveToRoutes = (glob = '') => {
+const resolveToRoutes = (glob = '') => {
   return path.join(root, 'app/routes', glob); // app/routes/{glob}
 };
 
-let resolveToComponents = (glob = '') => {
+const resolveToComponents = (glob = '') => {
   return path.join(root, 'app/components', glob); // app/components/{glob}
 };
-let resolveToServices = (glob = '') => {
+const resolveToServices = (glob = '') => {
   return path.join(root, 'app/services', glob); // app/services/{glob}
 };
 
@@ -71,7 +72,7 @@ gulp.task('webpack', ['clean'], (cb) => {
     gutil.log("[webpack]", stats.toString({
       colors: colorsSupported,
       chunks: false,
-      errorDetails: true
+      errorDetails: false
     }));
 
     cb();
@@ -99,7 +100,7 @@ gulp.task('serve', () => {
         stats: {
           colors: colorsSupported,
           chunks: false,
-          modules: true
+          modules: false
         },
         publicPath: config.output.publicPath
       }),
