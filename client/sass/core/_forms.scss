@@ -13,6 +13,9 @@
     }
   }
 }
+:focus {
+  outline: none;
+}
 
 .ui.input > input.transparent {
   text-align: center;
@@ -40,5 +43,17 @@
   }
   &:-ms-input-placeholder {
     color:    rgba(255,255,255, 0.5)
+  }
+}
+
+
+input {
+  width: 90%;
+  border-radius: 2px;
+  background: #fff;
+  border: 1px solid #bbb;
+  padding: 5px 10px;
+  &:focus {
+    border: 1px solid #999;
   }
 }

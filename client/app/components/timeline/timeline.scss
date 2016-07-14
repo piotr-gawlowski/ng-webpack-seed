@@ -3,5 +3,137 @@
 
 
 .timeline {
-  color: red
+  
+  .filters {
+  	background: #fff;
+  }
+
+  md-checkbox {
+  	margin: 5px;
+  }
+
+  .days {
+  	margin: 20px 0;
+  }
+
+  .day {
+  	background: #fff;
+  	//margin-bottom: 5px;
+  	.status {
+  		position: relative;
+  		transition: background 0.2s ease;
+  		display: flex;
+  		.fa-angle-down {
+  			font-size: 18px;
+  			transition: transform 0.2s ease;
+  			position: absolute;
+  			right: 15px; top: 5px;
+  			padding: 10px;
+  			opacity: 0.5;
+  			cursor: pointer;
+  			&:hover {
+  				opacity: 1;
+  			}
+  		}
+
+  		h6 {
+  			margin: 0; 
+  			font-size: 12px;
+  			margin: 20px 20px;
+  			position: relative;
+  		}	
+  	}
+  	.day-content {
+  		overflow: hidden;
+  		max-height: none;
+  		transition: max-height $timing $anim;
+
+  		&.ng-hide-remove {
+  			max-height: 0;
+  		}
+  		&.ng-hide-remove-active, &.ng-hide-add {
+  			max-height: 600px;
+  		}
+  		&.ng-hide-add-active {
+  			max-height: 0;
+  		}
+
+
+  		.in {
+  			padding: 10px;
+  		}
+  	}
+
+  	&:not(.active):hover{
+  		cursor: pointer;
+  		.status {
+  			background: rgba(255,247,149, 0.3);
+  		}
+  	}
+
+  	&.active {
+  		.status .fa-angle-down {
+  			transform: rotate(180deg);
+  		}
+  	}
+  }
+}
+
+.graph {
+	display: flex;
+	justify-content: center;
+	.issue {
+		display: flex;
+		margin-right: 10px;
+		width: 30px;
+		text-align: center;
+		justify-content: center;
+		align-items: center;
+		position: relative;
+		&.empty {
+			opacity: 0;
+		}
+		&:first-of-type {
+			margin-left: 10px;
+		}
+
+		.icon, .line {
+			display: inline-block;
+			text-align: center;
+		}
+		.line {
+			min-width: 4px;
+			height: 100%;
+			background: #ccc;
+			position: absolute;
+			left: calc(50% - 2px);
+
+			&.start {
+				height: 50%;
+				top: -25%;
+			}
+			&.end {
+				height: 50%;
+				top: 75%;
+			}
+			&.hidden {
+				opacity: 0;
+			}
+		}
+		.icon {
+			width: 30px;
+			height: 30px;
+			background: #FFAB40;
+			border-radius: 50%;
+			line-height: 30px;
+			text-align: center;
+			content: '';
+			position: relative;
+			z-index: 1;
+
+			&.success {
+				background: $green;
+			}
+		}
+	}
 }

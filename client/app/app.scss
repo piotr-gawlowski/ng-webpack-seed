@@ -1,5 +1,5 @@
 //include semantic ui
-@import "../../node_modules/semantic-ui/dist/semantic.min.css";
+@import "../../node_modules/angular-material/angular-material.css";
 //include icons
 $fa-font-path: "/fonts" !default;
 @import "../../node_modules/font-awesome/scss/font-awesome.scss";
@@ -14,6 +14,7 @@ $fa-font-path: "/fonts" !default;
 body {
   background: #f4f4f4;
   color: #222;
+  height: auto;
   &.noscroll {
     overflow: hidden;
   }
@@ -62,9 +63,10 @@ body {
   position: relative;
 }
 .outlet-full {
-  width: 100%; height: 100%;
+  width: 100%; min-height: 100%;
   transition: all 0.5s ease;
   opacity: 1; transform: translateY(0);
+  overflow: hidden;
 
   &.ng-hide, &.ng-enter {
     opacity: 0; transform: translateY(100px);

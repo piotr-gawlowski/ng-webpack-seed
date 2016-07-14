@@ -8,7 +8,7 @@ import './timeline/timeline';
 let services = angular.module('app.components', [
   'app.timeline',
   'app.status',
-  'app.top-bar',
+  'app.topBar',
 ]);
 
 export default services;

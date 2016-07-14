@@ -20,7 +20,7 @@ angular.module('app', [
     'app.components'
   ])
   .component('app', AppComponent)
-  .config(($locationProvider, $stateProvider, $urlRouterProvider) => {
+  .config(($locationProvider, $stateProvider, $urlRouterProvider, $mdThemingProvider) => {
     "ngInject";
     $locationProvider.html5Mode(true).hashPrefix('!');
 
@@ -31,6 +31,11 @@ angular.module('app', [
         template: '<dashboard></dashboard>'
       });
     $urlRouterProvider.otherwise('/');
+
+    //theme
+    $mdThemingProvider.theme('default')
+      .primaryPalette('blue')
+      .accentPalette('blue-grey');
 
   }).run(() => {
     "ngInject";

@@ -13,5 +13,5 @@ let topBarComponent = {
   controllerAs: 'vm'
 };
 
-angular.module('app.top-bar', []).component('topBar', topBarComponent);
+angular.module('app.topBar', []).component('topBar', topBarComponent);
 export default topBarComponent;
