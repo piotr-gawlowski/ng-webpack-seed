@@ -2,13 +2,15 @@ import angular from 'angular';
 import template from './top-bar.html';
 import './top-bar.scss';
 
-let topBarComponent = {
+const topBarComponent = {
   restrict: 'E',
   bindings: {},
   template,
-  controller: function(){
-    "ngInject";
-    this.name = 'top-bar';
+  controller: function() {
+    'ngInject';
+    this.settings = () => {
+      console.log('hello');
+    };
   },
   controllerAs: 'vm'
 };

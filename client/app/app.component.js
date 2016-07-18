@@ -1,11 +1,11 @@
 import template from './app.html';
 import './app.scss';
 
-let appComponent = {
+const appComponent = {
   template,
   restrict: 'E',
-  controller: function(){
-    "ngInject";
+  controller: function() {
+    'ngInject';
   },
   controllerAs: 'vm'
 };

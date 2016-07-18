@@ -1,0 +1,6 @@
+{
+  "extends": ["warp/node", "warp/es6"],
+  "env": {
+    "browser": true
+  }
+}

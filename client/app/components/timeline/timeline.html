@@ -1,36 +1,98 @@
-<div class="timeline">
-  <div class="filters" style="margin-top: 10px;" layout="row" md-whiteframe="1" layout-padding>
-  	<div flex-xs flex="22">
-        <md-checkbox class="md-primary" ng-model="vm.filters.issues" aria-label="Show issues">Show closed issues</md-checkbox>
+<div class="timeline" style="overflow: hidden; display: flex;">
+  <div layout="column" style="height: 90vh; width: 100%" ng-cloak>
+  <md-toolbar md-scroll-shrink class="md-primary">
+    <div class="md-toolbar-tools" layout="row" md-whiteframe="1" layout-align="space-between center">
+
+    	<!-- filters as dropdowns -->
+    	<md-menu class="visible-xs visible-sm">
+	      <md-button ng-click="$mdOpenMenu($event)" style="margin: 0" class="md-icon-button" aria-label="Settings">
+		  	<i class="fa fa-filter"></i>
+		  </md-button>
+	      <md-menu-content width="4">
+	        <md-menu-item>
+	          <md-button>
+	            <md-checkbox class="md-primary" ng-model="vm.filters.issues" aria-label="Show issues">Show closed issues</md-checkbox>
+	          </md-button>
+	        </md-menu-item>
+	        <md-menu-divider></md-menu-divider>
+	        <md-menu-item>
+	          <md-button ng-click="$mdOpenMenu($event)">
+	             <md-checkbox class="md-primary" ng-model="vm.filters.done" aria-label="Show issues">Show open days only</md-checkbox>
+	          </md-button>
+	        </md-menu-item>
+	      </md-menu-content>
+	    </md-menu>
+
+	    <div flex="70" layout="row" class="hidden-xs hidden-sm">
+	    	<div flex="50">
+		        <md-checkbox class="md-primary md-hue-2" ng-model="vm.filters.issues" aria-label="Show issues">Show closed issues</md-checkbox>
+		    </div>
+		    <div flex="50">
+		        <md-checkbox class="md-primary md-hue-2" ng-model="vm.filters.done" aria-label="Show transfers">Show open days only</md-checkbox>
+		    </div>
+	    </div>
+	    
+	    <!-- search -->
+	    <search on-update="vm.search(value)"></search>
     </div>
-    <div flex-xs flex="22">
-        <md-checkbox class="md-primary" ng-model="vm.filters.transfers" aria-label="Show transfers">Show transfers</md-checkbox>
-    </div>
-    <div flex-xs flex="30">
-        <input type="text" placeholder="Filter..." />
-    </div>
-    <div flex-xs flex="26">
-        <md-checkbox class="md-primary" ng-model="vm.filters.done" aria-label="Show open days">Show open days only</md-checkbox>
-    </div>
-  </div>
+  </md-toolbar>
+  <md-content md-no-momentum flex>
 
   <div class="days">
   	<div class="day" md-whiteframe="1" ng-class="{active: day.$$active}" ng-repeat="day in vm.timeline">
-  		<div class="status" ng-click="vm.toggle($event, day, true)">
+  		<div class="status" ng-click="vm.open($event, day)">
   			<div class="graph">
-	  			<span class="issue" ng-class="{empty: issue.hide}" ng-repeat="issue in day.issues track by $index">
-	  				<span ng-if="issue.event" class="icon" ng-class="{success: issue.close}"><i class="fa" ng-class="{'fa-check': issue.close, 'fa-warning': issue.open && !issue.close}"></i></span>
+	  			<span class="issue" ng-class="{empty: issue.hide}" ng-repeat="issue in (filtered = (day.issues | closedFilter: vm.filters.issues)) track by $index">
+	  				<span ng-if="issue.event" class="icon" ng-class="{success: issue.close, danger: issue.single && !issue.close}"><i class="fa" ng-class="{'fa-check': issue.close, 'fa-warning': issue.open && !issue.close}"></i></span>
 	  				<span class="line" ng-class="{end: issue.close, start: issue.open, hidden: issue.single}"></span>
 	  			</span>
+	  			<span class="issue empty" ng-if="filtered.length < 1"></span>
   			</div>
-  			<h6>{{day.$$when}}</h6>
-  			<i class="fa fa-angle-down" ng-click="vm.toggle($event, day)"></i>
+  			<h6>{{day.$$when}} <span ng-if="day.transfers" style="margin-left: 20px;" class="muted"><strong>{{day.transfers}}</strong> transfers</h6>
+  			<i class="fa fa-angle-down" ng-click="vm.close($event, day)"></i>
   		</div>
   		<div class="day-content" ng-show="day.$$active">
+  			<div class="graph">
+	  			<span class="issue" ng-class="{empty: issue.hide}" ng-repeat="issue in day.issues | closedFilter: vm.filters.issues track by $index">
+	  				<span class="line" ng-class="{hidden: issue.open || issue.single}"></span>
+	  			</span>
+	  			<span class="issue empty" ng-if="filtered.length < 1"></span>
+  			</div>
   			<div class="in">
-  				<pre>{{day | json}}</pre>
+  				<div style="margin: 20px 0;">
+	  				<md-button class="md-primary md-raised">Add transfer</md-button>
+	  				<md-button class="md-primary md-raised">Add malfunction</md-button>
+	  				<md-button class="md-primary md-raised">Add fuel</md-button>
+  				</div>
+
+  				<div class="event" ng-repeat="event in day.events">
+  					<i class="fa fa-pencil" ng-click="alert('Edit item')"></i>
+  					<div class="time">{{event.$$time}}</div>
+  					<div class="graph">
+			  			<span class="issue">
+			  				<span class="icon big" ng-class="{success: event.data.status === 'close', info: event.type === 'transfer'}">
+			  					<i class="fa" ng-class="{'fa-male': event.type === 'transfer', 'fa-warning': event.data.status === 'open', 'fa-check': event.data.status === 'close'}"></i>
+			  				</span>
+			  			</span>
+		  			</div>
+
+
+		  			<div>
+		  				<div ng-if="event.type == 'transfer'">
+		  					<strong>{{event.data.in + event.data.out}}</strong> Transfers <span class="muted">(<b>{{event.data.in}}</b> in, <b>{{event.data.out}}</b> out)</span>
+		  				</div>
+		  				<div ng-if="event.type == 'malfunction'">
+		  					{{event.data.description}}
+		  				</div>
+		  			</div>
+		  			<div style="margin-left: 20px;">
+		  				{{vm.users[event.reporterId]}}
+		  			</div>
+  				</div>
   			</div>
   		</div>
   	</div>
+  </div>
+  </md-content>
   </div>
 </div>

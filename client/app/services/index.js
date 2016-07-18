@@ -3,7 +3,7 @@ import angular from 'angular';
 //IMPORTS
 import './Status';
 
-let services = angular.module('app.services', [
+const services = angular.module('app.services', [
   'app.Status',
 ]);
 

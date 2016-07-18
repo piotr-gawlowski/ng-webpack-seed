@@ -8,20 +8,20 @@ import AppComponent from './app.component';
 //require modules
 import './services';
 import './routes';
-import './components'
+import './components';
 
 angular.module('app', [
-    uiRouter,
-    ngCookies,
-    ngAnimate,
-    ngMaterial,
-    'app.services',
-    'app.routes',
-    'app.components'
-  ])
+  uiRouter,
+  ngCookies,
+  ngAnimate,
+  ngMaterial,
+  'app.services',
+  'app.routes',
+  'app.components'
+])
   .component('app', AppComponent)
   .config(($locationProvider, $stateProvider, $urlRouterProvider, $mdThemingProvider) => {
-    "ngInject";
+    'ngInject';
     $locationProvider.html5Mode(true).hashPrefix('!');
 
     //define routes
@@ -38,7 +38,7 @@ angular.module('app', [
       .accentPalette('blue-grey');
 
   }).run(() => {
-    "ngInject";
+    'ngInject';
 
     /* catch if needed
     $rootScope.$on('$stateChangeStart', function(e, toState){

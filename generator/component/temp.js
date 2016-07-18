@@ -2,12 +2,12 @@ import angular from 'angular';
 import template from './<%= name %>.html';
 import './<%= name %>.scss';
 
-let <%= name %>Component = {
+const <%= name %>Component = {
   restrict: 'E',
   bindings: {},
   template,
   controller: function(){
-    "ngInject";
+    'ngInject';
     this.name = '<%= name %>';
   },
   controllerAs: 'vm'

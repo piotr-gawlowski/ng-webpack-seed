@@ -1,0 +1,7 @@
+<div class="search-box" ng-class="{active: vm.active}" flex>
+
+    <md-button ng-click="vm.active=true;" class="md-icon-button" aria-label="Search">
+        <i class="fa fa-search"></i>
+    </md-button>
+    <input type="text" ng-focus="vm.active=true" ng-model="vm.model" placeholder="Filter..." />
+</div>

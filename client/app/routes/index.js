@@ -3,7 +3,7 @@ import angular from 'angular';
 //IMPORTS
 import './dashboard/dashboard';
 
-let services = angular.module('app.routes', [
+const services = angular.module('app.routes', [
   'app.dashboard',
 ]);
 

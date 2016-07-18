@@ -2,12 +2,12 @@ import angular from 'angular';
 import template from './status.html';
 import './status.scss';
 
-let statusComponent = {
+const statusComponent = {
   restrict: 'E',
   bindings: {},
   template,
-  controller: function(){
-    "ngInject";
+  controller: function() {
+    'ngInject';
     this.name = 'status';
   },
   controllerAs: 'vm'
