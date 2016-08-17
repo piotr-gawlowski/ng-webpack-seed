@@ -28,6 +28,9 @@ module.exports = {
       }, {
         test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
         loader: "url?limit=10000&mimetype=image/svg+xml"
+      }, {
+        test: /\.json$/,
+        loader: "file"
       }
     ]
   },
@@ -38,7 +41,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: 'client/index.html',
       inject: 'body',
-      hash: true
+      hash: false
     }),
 
     //copy static assets
@@ -52,6 +55,16 @@ module.exports = {
         context: 'client/img',
         from: '**/*',
         to: 'img'
+      },
+      {
+        context: 'client',
+        from: 'app.appcache',
+        to: ''
+      },
+      {
+        context: 'client',
+        from: 'manifest.json',
+        to: ''
       },
       {
         context: 'node_modules/font-awesome/fonts',
