@@ -180,6 +180,7 @@ gulp.task('route', () => {
       name: name,
       APP: 'app',
       scssPath: scssPath,
+      nameCamelCase: changeCase.camel(name),
       upCaseName: cap(name)
     }))
     .pipe(rename((path) => {
