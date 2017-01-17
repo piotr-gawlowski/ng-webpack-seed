@@ -124,7 +124,6 @@ const modulize = (content, module) => {
 
   const imports = `\nimport './${yargs.argv.name}/${module}';`;
   const moduleDef = `  'app.${module}',`;
-
   return start + imports + previous + moduleDef +  '\n' + end;
 };
 
@@ -151,7 +150,6 @@ gulp.task('component', () => {
       path.basename = path.basename.replace('temp', name);
     }))
     .pipe(gulp.dest(destPath));
-
 });
 
 gulp.task('route', () => {
