@@ -166,6 +166,7 @@ gulp.task('route', () => {
   let proto = yargs.argv.name.split('/');
   const name = _.last(proto);
   const destPath = path.join(resolveToRoutes(), yargs.argv.name);
+  const scssPath = getRootLevel(resolveToRoutes() + '/' + proto.join('/'));
 
   gulp.src(path.join(resolveToRoutes(), 'index.js'), {base: './'})
     .pipe(change((content) => {
@@ -178,6 +179,7 @@ gulp.task('route', () => {
     .pipe(template({
       name: name,
       APP: 'app',
+      scssPath: scssPath,
       upCaseName: cap(name)
     }))
     .pipe(rename((path) => {
