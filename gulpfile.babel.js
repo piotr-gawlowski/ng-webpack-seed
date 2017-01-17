@@ -113,7 +113,7 @@ gulp.task('serve', () => {
 gulp.task('watch', ['serve']);
 
 // Generate path for scss files
-const generateScssPath = (string) => {
+const getRootLevel = (string) => {
     let path = '';
     _.each(string.split('/'),() => {
         path += '../'
@@ -139,8 +139,8 @@ gulp.task('component', () => {
   let proto = yargs.argv.name.split('/');
   const name = _.last(proto);
   const destPath = path.join(resolveToComponents(), yargs.argv.name);
-  const scssPath = generateScssPath(resolveToRoutes() + '/' + proto.join('/'));
-  
+  const scssPath = getRootLevel(resolveToRoutes() + '/' + proto.join('/'));
+
   gulp.src(path.join(resolveToComponents(), 'index.js'), {base: './'})
     .pipe(change((content) => {
         return modulize(content, name);
