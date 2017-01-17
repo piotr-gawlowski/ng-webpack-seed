@@ -112,7 +112,14 @@ gulp.task('serve', () => {
 
 gulp.task('watch', ['serve']);
 
-
+// Generate path for scss files
+const getRootLevel = (string) => {
+    let path = '';
+    _.each(string.split('/'),() => {
+        path += '../'
+    })
+    return path.slice(0,-3);
+}
 //auto-create imports for generated modules
 const modulize = (content, module) => {
 
@@ -124,6 +131,7 @@ const modulize = (content, module) => {
 
   const imports = `\nimport './${yargs.argv.name}/${module}';`;
   const moduleDef = `  'app.${module}',`;
+
   return start + imports + previous + moduleDef +  '\n' + end;
 };
 
@@ -131,6 +139,7 @@ gulp.task('component', () => {
   let proto = yargs.argv.name.split('/');
   const name = _.last(proto);
   const destPath = path.join(resolveToComponents(), yargs.argv.name);
+  const scssPath = getRootLevel(resolveToRoutes() + '/' + proto.join('/'));
 
   gulp.src(path.join(resolveToComponents(), 'index.js'), {base: './'})
     .pipe(change((content) => {
@@ -143,6 +152,7 @@ gulp.task('component', () => {
     .pipe(template({
       name: name,
       nameCamelCase: changeCase.camel(name),
+      scssPath: scssPath,
       APP: 'app',
       upCaseName: cap(name)
     }))
@@ -156,6 +166,7 @@ gulp.task('route', () => {
   let proto = yargs.argv.name.split('/');
   const name = _.last(proto);
   const destPath = path.join(resolveToRoutes(), yargs.argv.name);
+  const scssPath = getRootLevel(resolveToRoutes() + '/' + proto.join('/'));
 
   gulp.src(path.join(resolveToRoutes(), 'index.js'), {base: './'})
     .pipe(change((content) => {
@@ -168,6 +179,7 @@ gulp.task('route', () => {
     .pipe(template({
       name: name,
       APP: 'app',
+      scssPath: scssPath,
       nameCamelCase: changeCase.camel(name),
       upCaseName: cap(name)
     }))
