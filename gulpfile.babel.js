@@ -13,6 +13,7 @@ import _        from 'lodash';
 import gutil    from 'gulp-util';
 import serve    from 'browser-sync';
 import del      from 'del';
+import changeCase from 'change-case';
 import webpackDevMiddelware from 'webpack-dev-middleware';
 import webpachHotMiddelware from 'webpack-hot-middleware';
 import colorsSupported      from 'supports-color';
@@ -111,7 +112,14 @@ gulp.task('serve', () => {
 
 gulp.task('watch', ['serve']);
 
-
+// Generate path for scss files
+const generateScssPath = (string) => {
+    let path = '';
+    _.each(string.split('/'),() => {
+        path += '../'
+    })
+    return path.slice(0,-3);
+}
 //auto-create imports for generated modules
 const modulize = (content, module) => {
 
@@ -123,7 +131,7 @@ const modulize = (content, module) => {
 
   const imports = `\nimport './${yargs.argv.name}/${module}';`;
   const moduleDef = `  'app.${module}',`;
-  
+
   return start + imports + previous + moduleDef +  '\n' + end;
 };
 
@@ -131,7 +139,8 @@ gulp.task('component', () => {
   let proto = yargs.argv.name.split('/');
   const name = _.last(proto);
   const destPath = path.join(resolveToComponents(), yargs.argv.name);
-
+  const scssPath = generateScssPath(resolveToRoutes() + '/' + proto.join('/'));
+  
   gulp.src(path.join(resolveToComponents(), 'index.js'), {base: './'})
     .pipe(change((content) => {
         return modulize(content, name);
@@ -142,6 +151,8 @@ gulp.task('component', () => {
   return gulp.src(paths.blankComponent)
     .pipe(template({
       name: name,
+      nameCamelCase: changeCase.camel(name),
+      scssPath: scssPath,
       APP: 'app',
       upCaseName: cap(name)
     }))
@@ -149,7 +160,6 @@ gulp.task('component', () => {
       path.basename = path.basename.replace('temp', name);
     }))
     .pipe(gulp.dest(destPath));
-    
 });
 
 gulp.task('route', () => {
@@ -174,7 +184,7 @@ gulp.task('route', () => {
       path.basename = path.basename.replace('temp', name);
     }))
     .pipe(gulp.dest(destPath));
-    
+
 });
 
 gulp.task('service', () => {

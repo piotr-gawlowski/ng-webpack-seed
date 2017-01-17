@@ -1,5 +1,5 @@
-@import "../../../sass/constants";
-@import "../../../sass/mixins";
+@import "<%= scssPath %>sass/constants";
+@import "<%= scssPath %>sass/mixins";
 
 
 .<%= name %> {
