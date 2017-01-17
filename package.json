@@ -9,6 +9,7 @@
     "angular-base64-upload": "^0.1.19",
     "angular-touch": "^1.5.7",
     "angular-ui-router": "^0.2.15",
+    "change-case": "^3.0.0",
     "font-awesome": "^4.6.3",
     "moment": "^2.13.0"
   },
