@@ -2,7 +2,7 @@ import angular from 'angular';
 import template from './<%= name %>.html';
 import './<%= name %>.scss';
 
-const <%= name %>Component = {
+const <%= nameCamelCase %>Component = {
   restrict: 'E',
   bindings: {},
   template,
@@ -13,5 +13,5 @@ const <%= name %>Component = {
   controllerAs: 'vm'
 };
 
-angular.module('<%= APP %>.<%= name %>', []).component('<%= name %>', <%= name %>Component);
-export default <%= name %>Component;
+angular.module('<%= APP %>.<%= name %>', []).component('<%= nameCamelCase %>', <%= nameCamelCase %>Component);
+export default <%= nameCamelCase %>Component;

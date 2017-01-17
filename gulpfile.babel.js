@@ -1,18 +1,19 @@
 'use strict';
 
-import gulp     from 'gulp';
-import webpack  from 'webpack';
-import path     from 'path';
-import sync     from 'run-sequence';
-import rename   from 'gulp-rename';
-import template from 'gulp-template';
-import change   from 'gulp-change';
-import fs       from 'fs';
-import yargs    from 'yargs';
-import _        from 'lodash';
-import gutil    from 'gulp-util';
-import serve    from 'browser-sync';
-import del      from 'del';
+import gulp       from 'gulp';
+import webpack    from 'webpack';
+import path       from 'path';
+import sync       from 'run-sequence';
+import rename     from 'gulp-rename';
+import template   from 'gulp-template';
+import change     from 'gulp-change';
+import fs         from 'fs';
+import yargs      from 'yargs';
+import _          from 'lodash';
+import gutil      from 'gulp-util';
+import serve      from 'browser-sync';
+import del        from 'del';
+import changeCase from 'change-case';
 import webpackDevMiddelware from 'webpack-dev-middleware';
 import webpachHotMiddelware from 'webpack-hot-middleware';
 import colorsSupported      from 'supports-color';
@@ -123,7 +124,7 @@ const modulize = (content, module) => {
 
   const imports = `\nimport './${yargs.argv.name}/${module}';`;
   const moduleDef = `  'app.${module}',`;
-  
+
   return start + imports + previous + moduleDef +  '\n' + end;
 };
 
@@ -142,6 +143,7 @@ gulp.task('component', () => {
   return gulp.src(paths.blankComponent)
     .pipe(template({
       name: name,
+      nameCamelCase: changeCase.camel(name),
       APP: 'app',
       upCaseName: cap(name)
     }))
@@ -149,7 +151,7 @@ gulp.task('component', () => {
       path.basename = path.basename.replace('temp', name);
     }))
     .pipe(gulp.dest(destPath));
-    
+
 });
 
 gulp.task('route', () => {
@@ -174,7 +176,7 @@ gulp.task('route', () => {
       path.basename = path.basename.replace('temp', name);
     }))
     .pipe(gulp.dest(destPath));
-    
+
 });
 
 gulp.task('service', () => {
