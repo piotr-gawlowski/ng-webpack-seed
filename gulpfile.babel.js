@@ -20,34 +20,26 @@ import colorsSupported      from 'supports-color';
 import historyApiFallback   from 'connect-history-api-fallback';
 
 
-let root = 'client';
+const root = 'client';
 
 // helper methods for resolving paths
-const resolveToApp = (glob = '') => {
-  return path.join(root, 'app', glob); // app/{glob}
+const pathTypes = {
+  app: 'app',
+  components: 'app/components',
+  constants: 'app/constants',
+  factories: 'app/factories',
+  routes: 'app/routes',
+  services: 'app/services'
 };
-
-const resolveToRoutes = (glob = '') => {
-  return path.join(root, 'app/routes', glob); // app/routes/{glob}
-};
-
-const resolveToComponents = (glob = '') => {
-  return path.join(root, 'app/components', glob); // app/components/{glob}
-};
-const resolveToServices = (glob = '') => {
-  return path.join(root, 'app/services', glob); // app/services/{glob}
-};
-
-const cap = (val) => {
-  return val.charAt(0).toUpperCase() + val.slice(1);
-};
+const resolvePath = (type, glob = '') => path.join(root, pathTypes[type], glob);
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
 
 // map of all paths
-let paths = {
-  js: resolveToComponents('**/*!(.spec.js).js'), // exclude spec files
-  styl: resolveToApp('**/*.scss'), // stylesheets
+const paths = {
+  js: resolvePath('components', '**/*!(.spec.js).js'), // exclude spec files
+  styl: resolvePath('app', '**/*.scss'), // stylesheets
   html: [
-    resolveToApp('**/*.html'),
+    resolvePath('app', '**/*.html'),
     path.join(root, 'index.html')
   ],
   entry: [
@@ -56,7 +48,9 @@ let paths = {
   ],
   output: root,
   blankComponent: path.join(__dirname, 'generator', 'component/**/*.**'),
+  blankConstant: path.join(__dirname, 'generator', 'constant/**/*.**'),
   blankRoute: path.join(__dirname, 'generator', 'route/**/*.**'),
+  blankFactory: path.join(__dirname, 'generator', 'factory/**/*.**'),
   blankService: path.join(__dirname, 'generator', 'service/**/*.**'),
   dest: path.join(__dirname, 'dist')
 };
@@ -114,35 +108,30 @@ gulp.task('serve', () => {
 gulp.task('watch', ['serve']);
 
 // Generate path for scss files
-const getRootLevel = (string) => {
-    let path = '';
-    _.each(string.split('/'),() => {
-        path += '../'
-    })
-    return path.slice(0,-3);
-}
+const getRootLevel = (string) => _.times(string.split('/').length - 1, '').join('../');
+
 //auto-create imports for generated modules
 const modulize = (content, module) => {
 
-  let s = content.indexOf('//IMPORTS') + '//IMPORTS'.length;
-  let e = content.indexOf(']);');
+  const s = content.indexOf('//IMPORTS') + '//IMPORTS'.length;
+  const e = content.indexOf(']);');
   const start = content.substr(0, s);
   const end = content.substring(e);
   const previous = content.substring(s, e)
 
-  const imports = `\nimport './${yargs.argv.name}/${module}';`;
-  const moduleDef = `  'app.${module}',`;
+  const imports = `\nimport './${yargs.argv.name}${module ? '/' + module : ''}';`;
+  const moduleDef = `  'app.${module || yargs.argv.name}',`;
 
   return start + imports + previous + moduleDef +  '\n' + end;
 };
 
 gulp.task('component', () => {
-  let proto = yargs.argv.name.split('/');
+  const proto = yargs.argv.name.split('/');
   const name = _.last(proto);
-  const destPath = path.join(resolveToComponents(), yargs.argv.name);
-  const scssPath = getRootLevel(resolveToRoutes() + '/' + proto.join('/'));
+  const destPath = path.join(resolvePath('components'), yargs.argv.name);
+  const scssPath = getRootLevel(resolvePath('components') + '/' + proto.join('/'));
 
-  gulp.src(path.join(resolveToComponents(), 'index.js'), {base: './'})
+  gulp.src(path.join(resolvePath('components'), 'index.js'), {base: './'})
     .pipe(change((content) => {
         return modulize(content, name);
     }))
@@ -164,12 +153,12 @@ gulp.task('component', () => {
 });
 
 gulp.task('route', () => {
-  let proto = yargs.argv.name.split('/');
+  const proto = yargs.argv.name.split('/');
   const name = _.last(proto);
-  const destPath = path.join(resolveToRoutes(), yargs.argv.name);
-  const scssPath = getRootLevel(resolveToRoutes() + '/' + proto.join('/'));
+  const destPath = path.join(resolvePath('routes'), yargs.argv.name);
+  const scssPath = getRootLevel(resolvePath('routes') + '/' + proto.join('/'));
 
-  gulp.src(path.join(resolveToRoutes(), 'index.js'), {base: './'})
+  gulp.src(path.join(resolvePath('routes'), 'index.js'), {base: './'})
     .pipe(change((content) => {
         return modulize(content, name);
     }))
@@ -193,12 +182,10 @@ gulp.task('route', () => {
 
 gulp.task('service', () => {
   const name = yargs.argv.name;
-  const destPath = resolveToServices();
+  const destPath = resolvePath('services');
 
-    gulp.src(path.join(resolveToServices(), 'index.js'), {base: './'})
-    .pipe(change((content) => {
-        return modulize(content, name);
-    }))
+  gulp.src(path.join(resolvePath('services'), 'index.js'), {base: './'})
+    .pipe(change((content) => modulize(content)))
     .pipe(gulp.dest('./'));
 
   return gulp.src(paths.blankService)
@@ -213,6 +200,45 @@ gulp.task('service', () => {
     .pipe(gulp.dest(destPath));
 });
 
+gulp.task('factory', () => {
+  const name = yargs.argv.name;
+  const destPath = resolvePath('factories');
+
+  gulp.src(path.join(resolvePath('factories'), 'index.js'), {base: './'})
+    .pipe(change((content) => modulize(content)))
+    .pipe(gulp.dest('./'));
+
+  return gulp.src(paths.blankFactory)
+    .pipe(template({
+      name: name,
+      APP: 'app',
+      upCaseName: cap(name)
+    }))
+    .pipe(rename((path) => {
+      path.basename = path.basename.replace('temp', name);
+    }))
+    .pipe(gulp.dest(destPath));
+});
+
+gulp.task('constant', () => {
+  const name = yargs.argv.name;
+  const destPath = resolvePath('constants');
+
+  gulp.src(path.join(resolvePath('constants'), 'index.js'), {base: './'})
+    .pipe(change((content) => modulize(content)))
+    .pipe(gulp.dest('./'));
+
+  return gulp.src(paths.blankConstant)
+    .pipe(template({
+      name: name,
+      APP: 'app',
+      upCaseName: cap(name)
+    }))
+    .pipe(rename((path) => {
+      path.basename = path.basename.replace('temp', name);
+    }))
+    .pipe(gulp.dest(destPath));
+});
 
 gulp.task('clean', (cb) => {
   del([paths.dest]).then(function (paths) {
