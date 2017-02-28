@@ -2,7 +2,7 @@ const webpack = require('webpack');
 const path    = require('path');
 const config  = require('./webpack.config');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const {findIndex}  = require('lodash');
+const {findIndex} = require('lodash');
 
 config.output = {
   filename: '[name].bundle.js',
@@ -17,7 +17,6 @@ if(extractCssPropIndex !== -1) {
     use: ExtractTextPlugin.extract({
       fallback: 'style-loader',
       use: [
-        {loader: 'style-loader'},
         {loader: 'css-loader'},
         {loader: 'sass-loader'},
       ]
@@ -27,12 +26,17 @@ if(extractCssPropIndex !== -1) {
 
 config.plugins = config.plugins.concat([
 
-  // Reduces bundles total size
-  new webpack.optimize.UglifyJsPlugin({
-    mangle: {
-      except: ['$super', '$', 'exports', 'require', 'angular']
-    }
-  })
+  //Reduces bundles total size
+  // new webpack.optimize.UglifyJsPlugin({
+  //   mangle: {
+  //     except: ['$super', '$', 'exports', 'require', 'angular']
+  //   }
+  // }),
+  new webpack.LoaderOptionsPlugin({
+    minimize: true,
+    debug: false
+  }),
+  new ExtractTextPlugin('app.css')
 ]);
 
 module.exports = config;

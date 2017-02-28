@@ -2,7 +2,7 @@
 `npm install`
 
 # Development
-`gulp serve`
+`gulp`
 
 # Build
 `gulp build` - this one will create `dist/` folder with minified source

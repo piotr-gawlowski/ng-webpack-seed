@@ -31,8 +31,8 @@ const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
 
 // map of all paths
 const paths = {
-  js: resolvePath('components', '**/*!(.spec.js).js'), // exclude spec files
-  styl: resolvePath('app', '**/*.scss'), // stylesheets
+  js: resolvePath('components', '**/*!(.spec.js).js'),
+  styl: resolvePath('app', '**/*.scss'),
   html: [
     resolvePath('app', '**/*.html'),
     path.join(root, 'index.html')
@@ -73,7 +73,7 @@ gulp.task('build', ['clean'], cb => {
 gulp.task('serve', () => {
   const config = require('./webpack.dev.config');
   config.entry.app = [
-    'webpack-hot-middleware/client?reload=true',
+    'webpack-hot-middleware/client',
   ].concat(paths.entry);
 
   const compiler = webpack(config);
@@ -100,7 +100,7 @@ gulp.task('serve', () => {
 gulp.task('watch', ['serve']);
 
 // Generate path for scss files
-const getRootLevel = (string) => _.times(string.split('/').length - 1, '').join('../');
+const getRootLevel = string => _.times(string.split('/').length - 1, '').join('../');
 
 //auto-create imports for generated modules
 const modulize = (content, moduleGroup, module) => {
