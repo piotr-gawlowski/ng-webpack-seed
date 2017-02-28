@@ -16,11 +16,11 @@ import run from './run';
 const dependencies = [
   uiRouter,
   ngAnimate,
+  'app.constants',
+  'app.factories',
   'app.services',
   'app.routes',
   'app.components',
-  'app.factories',
-  'app.constants',
 ];
 
 angular.module('app', dependencies)

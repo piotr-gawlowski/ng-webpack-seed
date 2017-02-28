@@ -22,7 +22,7 @@ const pathTypes = {
   app: 'app',
   components: 'app/components',
   constants: 'app/constants',
-  factories: 'app/factories',
+  factory: 'app/factories',
   routes: 'app/routes',
   services: 'app/services'
 };
@@ -42,12 +42,15 @@ const paths = {
     path.join(__dirname, root, 'app/app.js')
   ],
   output: root,
-  blankComponent: path.join(__dirname, 'generator', 'component/**/*.**'),
-  blankConstant: path.join(__dirname, 'generator', 'constant/**/*.**'),
-  blankRoute: path.join(__dirname, 'generator', 'route/**/*.**'),
-  blankFactory: path.join(__dirname, 'generator', 'factory/**/*.**'),
-  blankService: path.join(__dirname, 'generator', 'service/**/*.**'),
-  dest: path.join(__dirname, 'dist')
+  blank: type => ({
+    resolve: path.join(__dirname, 'generator', `${type}/**/*.**`)
+  }),
+  blankComponent: {resolve: path.join(__dirname, 'generator', 'component/**/*.**')},
+  blankConstant: {resolve: path.join(__dirname, 'generator', 'constant/**/*.**')},
+  blankRoute: {resolve: path.join(__dirname, 'generator', 'route/**/*.**')},
+  blankFactory: {resolve: path.join(__dirname, 'generator', 'factory/**/*.**')},
+  blankService: {resolve: path.join(__dirname, 'generator', 'service/**/*.**')},
+  dest: {resolve: path.join(__dirname, 'dist')}
 };
 
 // use webpack.config.js to build modules
@@ -59,7 +62,6 @@ gulp.task('build', ['clean'], cb => {
     if(err) {
       throw new gutil.PluginError('webpack', err);
     }
-
     gutil.log('[webpack]', stats.toString({
       colors: colorsSupported,
       chunks: false,
@@ -117,80 +119,34 @@ const modulize = (content, moduleGroup, module) => {
   return `${start + imports + previous + moduleDef}\n${end}`;
 };
 
-gulp.task('component', () => {
+const generator = type => () => {
   const proto = yargs.argv.name.split('/');
   const name = _.last(proto);
-  const destPath = path.join(resolvePath('components'), yargs.argv.name);
-  const scssPath = getRootLevel(resolvePath('components') + '/' + proto.join('/'));
+  const destPath = path.join(resolvePath(`${type}s`), yargs.argv.name);
+  const scssPath = getRootLevel(resolvePath(`${type}s/${proto.join}`));
 
-  gulp.src(path.join(resolvePath('components'), 'index.js'), {base: './'})
-    .pipe(change((content) => {
-        return modulize(content, 'components', name);
-    }))
+  gulp.src(path.join(resolvePath(`${type}s`), 'index.js'), {base: './'})
+    .pipe(change(content => modulize(content, `${type}s`, name)))
     .pipe(gulp.dest('./'));
 
-
-  return gulp.src(paths.blankComponent)
+  return gulp.src(paths.blank('component').resolve)
     .pipe(template({
       name: name,
       nameCamelCase: _.camelCase(name),
       scssPath: scssPath,
-      APP: 'app.components',
+      APP: `app.${type}`,
       upCaseName: cap(name)
     }))
     .pipe(rename(path => {
       path.basename = path.basename.replace('temp', name);
     }))
     .pipe(gulp.dest(destPath));
-});
+};
 
-gulp.task('route', () => {
-  const proto = yargs.argv.name.split('/');
-  const name = _.last(proto);
-  const destPath = path.join(resolvePath('routes'), yargs.argv.name);
-  const scssPath = getRootLevel(resolvePath('routes') + '/' + proto.join('/'));
-
-  gulp.src(path.join(resolvePath('routes'), 'index.js'), {base: './'})
-    .pipe(change((content) => {
-        return modulize(content, 'routes', name);
-    }))
-    .pipe(gulp.dest('./'));
-
-
-  return gulp.src(paths.blankRoute)
-    .pipe(template({
-      name: name,
-      APP: 'app.routes',
-      scssPath: scssPath,
-      nameCamelCase: _.camelCase(name),
-      upCaseName: cap(name)
-    }))
-    .pipe(rename(path => {
-      path.basename = path.basename.replace('temp', name);
-    }))
-    .pipe(gulp.dest(destPath));
-
-});
-
-gulp.task('service', () => {
-  const name = yargs.argv.name;
-  const destPath = resolvePath('services');
-
-  gulp.src(path.join(resolvePath('services'), 'index.js'), {base: './'})
-    .pipe(change((content) => modulize(content, 'services')))
-    .pipe(gulp.dest('./'));
-
-  return gulp.src(paths.blankService)
-    .pipe(template({
-      name: name,
-      APP: 'app.services',
-      upCaseName: cap(name)
-    }))
-    .pipe(rename(path => {
-      path.basename = path.basename.replace('temp', name);
-    }))
-    .pipe(gulp.dest(destPath));
-});
+gulp.task('component', generator('component'));
+gulp.task('route', generator('route'));
+gulp.task('service', generator('service'));
+gulp.task('constant', generator(constant));
 
 gulp.task('factory', () => {
   const name = yargs.argv.name;
@@ -212,25 +168,6 @@ gulp.task('factory', () => {
     .pipe(gulp.dest(destPath));
 });
 
-gulp.task('constant', () => {
-  const name = yargs.argv.name;
-  const destPath = resolvePath('constants');
-
-  gulp.src(path.join(resolvePath('constants'), 'index.js'), {base: './'})
-    .pipe(change((content) => modulize(content, 'constants')))
-    .pipe(gulp.dest('./'));
-
-  return gulp.src(paths.blankConstant)
-    .pipe(template({
-      name: name,
-      APP: 'app.constants',
-      upCaseName: cap(name)
-    }))
-    .pipe(rename((path) => {
-      path.basename = path.basename.replace('temp', name);
-    }))
-    .pipe(gulp.dest(destPath));
-});
 
 gulp.task('clean', (cb) => {
   del([paths.dest]).then(function (paths) {
