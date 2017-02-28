@@ -3,10 +3,9 @@ import template from './<%= name %>.html';
 import './<%= name %>.scss';
 
 const <%= nameCamelCase %>Component = {
-  restrict: 'E',
   bindings: {},
   template,
-  controller: function(){
+  controller: function() {
     'ngInject';
     this.name = '<%= name %>';
   },

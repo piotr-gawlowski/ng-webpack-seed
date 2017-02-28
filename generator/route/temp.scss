@@ -1,7 +1,5 @@
-@import "../../../sass/constants";
-@import "../../../sass/mixins";
+@import "<%= scssPath %>app/core/constants";
+@import "<%= scssPath %>app/core/mixins";
 
-
-.<%= name %> {
-  color: red
+<%= name %> {
 }

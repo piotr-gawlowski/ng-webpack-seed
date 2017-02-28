@@ -1,12 +1,12 @@
 //include icons
 $fa-font-path: "/fonts" !default;
-@import "../../node_modules/font-awesome/scss/font-awesome.scss";
+@import "../../../node_modules/font-awesome/scss/font-awesome.scss";
 
-@import "../sass/constants";
-@import "../sass/core/text";
-@import "../sass/core/responsive";
-@import "../sass/core/viewport";
-@import "../sass/core/forms";
+@import "./constants";
+@import "./text";
+@import "./responsive";
+@import "./viewport";
+@import "./forms";
 
 
 body {
