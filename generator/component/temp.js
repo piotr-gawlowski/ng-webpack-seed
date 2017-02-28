@@ -7,6 +7,7 @@ const <%= nameCamelCase %>Component = {
   template,
   controller: function() {
     'ngInject';
+ 
     this.name = '<%= name %>';
   },
   controllerAs: 'vm'

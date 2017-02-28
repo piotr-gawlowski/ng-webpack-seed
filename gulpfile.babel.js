@@ -103,7 +103,7 @@ gulp.task('watch', ['serve']);
 const getRootLevel = (string) => _.times(string.split('/').length - 1, '').join('../');
 
 //auto-create imports for generated modules
-const modulize = (content, module) => {
+const modulize = (content, moduleGroup, module) => {
 
   const s = content.indexOf('//IMPORTS') + '//IMPORTS'.length;
   const e = content.indexOf(']);');
@@ -112,7 +112,7 @@ const modulize = (content, module) => {
   const previous = content.substring(s, e);
 
   const imports = `\nimport './${yargs.argv.name}${module ? '/' + module : ''}';`;
-  const moduleDef = `  'app.${module || yargs.argv.name}',`;
+  const moduleDef = `  'app.${moduleGroup}.${module || yargs.argv.name}',`;
 
   return `${start + imports + previous + moduleDef}\n${end}`;
 };
@@ -125,7 +125,7 @@ gulp.task('component', () => {
 
   gulp.src(path.join(resolvePath('components'), 'index.js'), {base: './'})
     .pipe(change((content) => {
-        return modulize(content, name);
+        return modulize(content, 'components', name);
     }))
     .pipe(gulp.dest('./'));
 
@@ -135,7 +135,7 @@ gulp.task('component', () => {
       name: name,
       nameCamelCase: _.camelCase(name),
       scssPath: scssPath,
-      APP: 'app',
+      APP: 'app.components',
       upCaseName: cap(name)
     }))
     .pipe(rename(path => {
@@ -152,7 +152,7 @@ gulp.task('route', () => {
 
   gulp.src(path.join(resolvePath('routes'), 'index.js'), {base: './'})
     .pipe(change((content) => {
-        return modulize(content, name);
+        return modulize(content, 'routes', name);
     }))
     .pipe(gulp.dest('./'));
 
@@ -160,7 +160,7 @@ gulp.task('route', () => {
   return gulp.src(paths.blankRoute)
     .pipe(template({
       name: name,
-      APP: 'app',
+      APP: 'app.routes',
       scssPath: scssPath,
       nameCamelCase: _.camelCase(name),
       upCaseName: cap(name)
@@ -177,13 +177,13 @@ gulp.task('service', () => {
   const destPath = resolvePath('services');
 
   gulp.src(path.join(resolvePath('services'), 'index.js'), {base: './'})
-    .pipe(change((content) => modulize(content)))
+    .pipe(change((content) => modulize(content, 'services')))
     .pipe(gulp.dest('./'));
 
   return gulp.src(paths.blankService)
     .pipe(template({
       name: name,
-      APP: 'app',
+      APP: 'app.services',
       upCaseName: cap(name)
     }))
     .pipe(rename(path => {
@@ -197,13 +197,13 @@ gulp.task('factory', () => {
   const destPath = resolvePath('factories');
 
   gulp.src(path.join(resolvePath('factories'), 'index.js'), {base: './'})
-    .pipe(change((content) => modulize(content)))
+    .pipe(change((content) => modulize(content, 'factories')))
     .pipe(gulp.dest('./'));
 
   return gulp.src(paths.blankFactory)
     .pipe(template({
       name: name,
-      APP: 'app',
+      APP: 'app.factories',
       upCaseName: cap(name)
     }))
     .pipe(rename((path) => {
@@ -217,13 +217,13 @@ gulp.task('constant', () => {
   const destPath = resolvePath('constants');
 
   gulp.src(path.join(resolvePath('constants'), 'index.js'), {base: './'})
-    .pipe(change((content) => modulize(content)))
+    .pipe(change((content) => modulize(content, 'constants')))
     .pipe(gulp.dest('./'));
 
   return gulp.src(paths.blankConstant)
     .pipe(template({
       name: name,
-      APP: 'app',
+      APP: 'app.constants',
       upCaseName: cap(name)
     }))
     .pipe(rename((path) => {

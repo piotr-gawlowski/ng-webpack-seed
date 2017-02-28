@@ -21,5 +21,5 @@ const dashboardComponent = {
   controllerAs: 'vm'
 };
 
-routeWrap(angular).module('app.dashboard', []).route('dashboard', dashboardComponent);
+routeWrap(angular).module('app.routes.dashboard', []).route('dashboard', dashboardComponent);
 export default dashboardComponent;
