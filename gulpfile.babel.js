@@ -9,7 +9,6 @@ import _ from 'lodash';
 import gutil from 'gulp-util';
 import serve from 'browser-sync';
 import del from 'del';
-import changeCase from 'change-case';
 import webpackDevMiddelware from 'webpack-dev-middleware';
 import webpachHotMiddelware from 'webpack-hot-middleware';
 import colorsSupported from 'supports-color';
@@ -134,7 +133,7 @@ gulp.task('component', () => {
   return gulp.src(paths.blankComponent)
     .pipe(template({
       name: name,
-      nameCamelCase: changeCase.camel(name),
+      nameCamelCase: _.camelCase(name),
       scssPath: scssPath,
       APP: 'app',
       upCaseName: cap(name)
@@ -163,7 +162,7 @@ gulp.task('route', () => {
       name: name,
       APP: 'app',
       scssPath: scssPath,
-      nameCamelCase: changeCase.camel(name),
+      nameCamelCase: _.camelCase(name),
       upCaseName: cap(name)
     }))
     .pipe(rename(path => {

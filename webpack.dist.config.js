@@ -1,6 +1,8 @@
-var webpack = require('webpack');
-var path    = require('path');
-var config  = require('./webpack.config');
+const webpack = require('webpack');
+const path    = require('path');
+const config  = require('./webpack.config');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const {find}  = require('lodash');
 
 config.output = {
   filename: '[name].bundle.js',
@@ -8,16 +10,24 @@ config.output = {
   path: path.resolve(__dirname, 'dist')
 };
 
+const extractCssPropIndex = findIndex(config.module.rules, {name: 'cssextract'});
+config.module.rules[extractCssPropIndex] = {
+  test: /\.scss/,
+  use: ExtractTextPlugin.extract({
+    fallback: 'style-loader',
+    use: [
+      {loader: 'style-loader'},
+      {loader: 'css-loader'},
+      {loader: 'sass-loader'},
+    ]
+  })
+};
+
 config.plugins = config.plugins.concat([
 
   // Reduces bundles total size
   new webpack.optimize.UglifyJsPlugin({
     mangle: {
-
-      // You can specify all variables that should not be mangled.
-      // For example if your vendor dependency doesn't use modules
-      // and relies on global variables. Most of angular modules relies on
-      // angular global variable, so we should keep it unchanged
       except: ['$super', '$', 'exports', 'require', 'angular']
     }
   })

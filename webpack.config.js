@@ -7,30 +7,60 @@ module.exports = {
   devtool: 'sourcemap',
   entry: {},
   module: {
-    loaders: [
-       {test: /\.js$/, exclude: [/app\/lib/, /node_modules/], loader: 'ng-annotate!babel'},
-       {test: /\.html$/, loader: 'raw'},
-       {test: /\.scss/, loader: 'style!css!sass'},
-       {test: /\.css$/, loader: 'style!css'},
-       {test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192'},
+    rules: [
       {
-        test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url?limit=10000&mimetype=application/font-woff'
-      }, {
-        test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url?limit=10000&mimetype=application/font-woff'
-      }, {
-        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url?limit=10000&mimetype=application/octet-stream'
-      }, {
-        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'file'
-      }, {
-        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url?limit=10000&mimetype=image/svg+xml'
-      }, {
+        //name: 'cssextract',
+        test: /\.scss/,
+        use: [
+          {loader: 'style-loader'},
+          {loader: 'css-loader'},
+          {loader: 'sass-loader'},
+        ]
+      },
+      {
+        test: /\.js$/,
+        exclude: [/app\/lib/, /node_modules/],
+        use: [
+          {loader: 'ng-annotate'},
+          {loader: 'babel-loader'},
+        ]
+      },
+      {
+        test: /\.html$/,
+        use: [
+          {loader: 'raw-loader'}
+        ]
+      },
+      {
+        test: /\.css$/,
+        use: [
+          {loader: 'style-loader'},
+          {loader: 'css-loader'},
+        ]
+      },
+      {
+        test: /\.(png|jpg)$/,
+        use: [
+          {loader: 'url-loader', options: {limit: 8192}},
+        ]
+      },
+      {
+        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        use: [
+          {loader: 'url-loader', options: {limit: 10000, mimetype: 'application/font-woff'}},
+        ]
+      },
+      {
+        test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        use: [
+          {loader: 'file-loader'},
+        ]
+      },
+      {
         test: /\.json$/,
-        loader: 'file'
+        use: [
+          {loader: 'file-loader'},
+        ]
       }
     ]
   },
@@ -55,16 +85,6 @@ module.exports = {
         context: 'client/img',
         from: '**/*',
         to: 'img'
-      },
-      {
-        context: 'client',
-        from: 'app.appcache',
-        to: ''
-      },
-      {
-        context: 'client',
-        from: 'manifest.json',
-        to: ''
       },
       {
         context: 'node_modules/font-awesome/fonts',
