@@ -9,3 +9,4 @@ semantic.json
 dist/
 .idea
 client/lib
+.vscode
