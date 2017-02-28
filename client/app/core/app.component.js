@@ -3,9 +3,8 @@ import './app.scss';
 
 let appComponent = {
   template,
-  restrict: 'E',
-  controller: function(){
-    "ngInject";
+  controller: function() {
+    'ngInject';
   },
   controllerAs: 'vm'
 };

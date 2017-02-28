@@ -1,18 +1,25 @@
 import angular from 'angular';
+import routeWrap from 'ng-component-routing';
 import template from './dashboard.html';
 import './dashboard.scss';
 
+const controller = function() {
+  'ngInject';
+  
+  this.name = 'dashboard';
+};
 
-let dashboardComponent = {
-  restrict: 'E',
+const dashboardComponent = {
   bindings: {},
-  template,
-  controller: function(){
-    "ngInject";
+  routeOpts: {
+    name: 'dashboard',
+    url: '/',
+    pageTitle: 'dashboard',
   },
+  template,
+  controller,
   controllerAs: 'vm'
 };
 
-angular.module('app.dashboard', []).component('dashboard', dashboardComponent);
-
+routeWrap(angular).module('app.dashboard', []).route('dashboard', dashboardComponent);
 export default dashboardComponent;

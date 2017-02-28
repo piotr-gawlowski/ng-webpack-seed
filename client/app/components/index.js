@@ -2,7 +2,7 @@ import angular from 'angular';
 
 //IMPORTS
 
-let services = angular.module('app.components', [
+const components = angular.module('app.components', [
 ]);
 
-export default services;
+export default components;
