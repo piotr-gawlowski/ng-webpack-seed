@@ -14,7 +14,6 @@ import webpachHotMiddelware from 'webpack-hot-middleware';
 import colorsSupported from 'supports-color';
 import historyApiFallback from 'connect-history-api-fallback';
 
-
 const root = 'client';
 
 // helper methods for resolving paths
@@ -42,12 +41,54 @@ const paths = {
     path.join(__dirname, root, 'app/app.js')
   ],
   output: root,
-  blank: type => ({
-    resolve: path.join(__dirname, 'generator', `${type}/**/*.**`)
-  })
+  blank: type => path.join(__dirname, 'generator', `${type}/**/*.**`)
 };
 
-// use webpack.config.js to build modules
+//Generate path for scss files
+const getRootLevel = string => _.times(string.split('/').length - 1, '').join('../');
+
+//create imports for generated modules
+const modulize = (content, moduleGroup, module) => {
+
+  const s = content.indexOf('//IMPORTS') + '//IMPORTS'.length;
+  const e = content.indexOf(']);');
+  const start = content.substr(0, s);
+  const end = content.substring(e);
+  const previous = content.substring(s, e);
+
+  const imports = `\nimport './${yargs.argv.name}${module ? '/' + module : ''}';`;
+  const moduleDef = `  'app.${moduleGroup}.${module || yargs.argv.name}',`;
+
+  return `${start + imports + previous + moduleDef}\n${end}`;
+};
+
+//creates gulp task
+const generator = type => () => {
+  const proto = yargs.argv.name.split('/');
+  const name = _.last(proto);
+  const typed = type !== 'factory' ? `${type}s` : 'factories';
+  const destPath = path.join(resolvePath(typed), yargs.argv.name);
+  const scssPath = getRootLevel(resolvePath(typed) + `/${proto.join('/')}`);
+
+  gulp.src(path.join(resolvePath(typed), 'index.js'), {base: './'})
+    .pipe(change(content => modulize(content, typed, name)))
+    .pipe(gulp.dest('./'));
+
+  return gulp.src(paths.blank(type))
+    .pipe(template({
+      name: name,
+      nameCamelCase: _.camelCase(name),
+      scssPath: scssPath,
+      APP: `app.${typed}`,
+      upCaseName: cap(name)
+    }))
+    .pipe(rename(path => {
+      path.basename = path.basename.replace('temp', name);
+    }))
+    .pipe(gulp.dest(destPath));
+};
+
+//use webpack.config.js to build modules
 gulp.task('build', ['clean'], cb => {
   const config = require('./webpack.dist.config');
   config.entry.app = paths.entry;
@@ -93,77 +134,11 @@ gulp.task('serve', () => {
   });
 });
 
-gulp.task('watch', ['serve']);
-
-// Generate path for scss files
-const getRootLevel = string => _.times(string.split('/').length - 1, '').join('../');
-
-//auto-create imports for generated modules
-const modulize = (content, moduleGroup, module) => {
-
-  const s = content.indexOf('//IMPORTS') + '//IMPORTS'.length;
-  const e = content.indexOf(']);');
-  const start = content.substr(0, s);
-  const end = content.substring(e);
-  const previous = content.substring(s, e);
-
-  const imports = `\nimport './${yargs.argv.name}${module ? '/' + module : ''}';`;
-  const moduleDef = `  'app.${moduleGroup}.${module || yargs.argv.name}',`;
-
-  return `${start + imports + previous + moduleDef}\n${end}`;
-};
-
-const generator = type => () => {
-  const proto = yargs.argv.name.split('/');
-  const name = _.last(proto);
-  const typed = type !== 'factory' ? `${type}s` : 'factories';
-  const destPath = path.join(resolvePath(typed), yargs.argv.name);
-  const scssPath = getRootLevel(resolvePath(typed) + `/${proto.join('/')}`);
-
-  gulp.src(path.join(resolvePath(typed), 'index.js'), {base: './'})
-    .pipe(change(content => modulize(content, typed, name)))
-    .pipe(gulp.dest('./'));
-
-  return gulp.src(paths.blank('component').resolve)
-    .pipe(template({
-      name: name,
-      nameCamelCase: _.camelCase(name),
-      scssPath: scssPath,
-      APP: `app.${typed}`,
-      upCaseName: cap(name)
-    }))
-    .pipe(rename(path => {
-      path.basename = path.basename.replace('temp', name);
-    }))
-    .pipe(gulp.dest(destPath));
-};
-
 gulp.task('component', generator('component'));
 gulp.task('route', generator('route'));
 gulp.task('service', generator('service'));
 gulp.task('factory', generator('factory'));
 gulp.task('constant', generator('constant'));
-
-gulp.task('factoryss', () => {
-  const name = yargs.argv.name;
-  const destPath = resolvePath('factories');
-
-  gulp.src(path.join(resolvePath('factories'), 'index.js'), {base: './'})
-    .pipe(change((content) => modulize(content, 'factories')))
-    .pipe(gulp.dest('./'));
-
-  return gulp.src(paths.blankFactory)
-    .pipe(template({
-      name: name,
-      APP: 'app.factories',
-      upCaseName: cap(name)
-    }))
-    .pipe(rename((path) => {
-      path.basename = path.basename.replace('temp', name);
-    }))
-    .pipe(gulp.dest(destPath));
-});
-
 
 gulp.task('clean', (cb) => {
   del([paths.dest]).then(function (paths) {
@@ -172,4 +147,4 @@ gulp.task('clean', (cb) => {
   });
 });
 
-gulp.task('default', ['watch']);
+gulp.task('default', ['serve']);
