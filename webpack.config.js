@@ -9,8 +9,7 @@ module.exports = {
   module: {
     rules: [
       {
-        //name: 'cssextract',
-        test: /\.scss/,
+        test: /\.scss$/,
         use: [
           {loader: 'style-loader'},
           {loader: 'css-loader'},
@@ -52,12 +51,6 @@ module.exports = {
       },
       {
         test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        use: [
-          {loader: 'file-loader'},
-        ]
-      },
-      {
-        test: /\.json$/,
         use: [
           {loader: 'file-loader'},
         ]
