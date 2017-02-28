@@ -4,7 +4,7 @@ import angular from 'angular';
 import './dashboard/dashboard';
 
 const routes = angular.module('app.routes', [
-  'app.dashboard',
+  'app.routes.dashboard',
 ]);
 
 export default routes;
