@@ -11,7 +11,8 @@
     "angular-ui-router": "^0.2.15",
     "change-case": "^3.0.0",
     "font-awesome": "^4.6.3",
-    "moment": "^2.13.0"
+    "moment": "^2.13.0",
+    "ng-component-routing": "^1.0.9"
   },
   "devDependencies": {
     "angular-mocks": "^1.5.0",

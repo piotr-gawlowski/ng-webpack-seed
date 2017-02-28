@@ -56,6 +56,7 @@ let paths = {
   ],
   output: root,
   blankComponent: path.join(__dirname, 'generator', 'component/**/*.**'),
+  blankRoute: path.join(__dirname, 'generator', 'route/**/*.**'),
   blankService: path.join(__dirname, 'generator', 'service/**/*.**'),
   dest: path.join(__dirname, 'dist')
 };
@@ -175,7 +176,7 @@ gulp.task('route', () => {
     .pipe(gulp.dest('./'));
 
 
-  return gulp.src(paths.blankComponent)
+  return gulp.src(paths.blankRoute)
     .pipe(template({
       name: name,
       APP: 'app',
