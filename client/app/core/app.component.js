@@ -1,7 +1,7 @@
 import template from './app.html';
 import './app.scss';
 
-let appComponent = {
+const appComponent = {
   template,
   controller: function() {
     'ngInject';

@@ -22,7 +22,7 @@ const pathTypes = {
   app: 'app',
   components: 'app/components',
   constants: 'app/constants',
-  factory: 'app/factories',
+  factories: 'app/factories',
   routes: 'app/routes',
   services: 'app/services'
 };
@@ -44,13 +44,7 @@ const paths = {
   output: root,
   blank: type => ({
     resolve: path.join(__dirname, 'generator', `${type}/**/*.**`)
-  }),
-  blankComponent: {resolve: path.join(__dirname, 'generator', 'component/**/*.**')},
-  blankConstant: {resolve: path.join(__dirname, 'generator', 'constant/**/*.**')},
-  blankRoute: {resolve: path.join(__dirname, 'generator', 'route/**/*.**')},
-  blankFactory: {resolve: path.join(__dirname, 'generator', 'factory/**/*.**')},
-  blankService: {resolve: path.join(__dirname, 'generator', 'service/**/*.**')},
-  dest: {resolve: path.join(__dirname, 'dist')}
+  })
 };
 
 // use webpack.config.js to build modules
@@ -122,11 +116,12 @@ const modulize = (content, moduleGroup, module) => {
 const generator = type => () => {
   const proto = yargs.argv.name.split('/');
   const name = _.last(proto);
-  const destPath = path.join(resolvePath(`${type}s`), yargs.argv.name);
-  const scssPath = getRootLevel(resolvePath(`${type}s/${proto.join}`));
+  const typed = type !== 'factory' ? `${type}s` : 'factories';
+  const destPath = path.join(resolvePath(typed), yargs.argv.name);
+  const scssPath = getRootLevel(resolvePath(typed) + `/${proto.join('/')}`);
 
-  gulp.src(path.join(resolvePath(`${type}s`), 'index.js'), {base: './'})
-    .pipe(change(content => modulize(content, `${type}s`, name)))
+  gulp.src(path.join(resolvePath(typed), 'index.js'), {base: './'})
+    .pipe(change(content => modulize(content, typed, name)))
     .pipe(gulp.dest('./'));
 
   return gulp.src(paths.blank('component').resolve)
@@ -134,7 +129,7 @@ const generator = type => () => {
       name: name,
       nameCamelCase: _.camelCase(name),
       scssPath: scssPath,
-      APP: `app.${type}`,
+      APP: `app.${typed}`,
       upCaseName: cap(name)
     }))
     .pipe(rename(path => {
@@ -146,9 +141,10 @@ const generator = type => () => {
 gulp.task('component', generator('component'));
 gulp.task('route', generator('route'));
 gulp.task('service', generator('service'));
-gulp.task('constant', generator(constant));
+gulp.task('factory', generator('factory'));
+gulp.task('constant', generator('constant'));
 
-gulp.task('factory', () => {
+gulp.task('factoryss', () => {
   const name = yargs.argv.name;
   const destPath = resolvePath('factories');
 

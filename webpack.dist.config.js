@@ -1,6 +1,6 @@
 const webpack = require('webpack');
-const path    = require('path');
-const config  = require('./webpack.config');
+const path = require('path');
+const config = require('./webpack.config');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const {findIndex} = require('lodash');
 

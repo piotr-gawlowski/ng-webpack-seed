@@ -27,6 +27,7 @@
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.26.2",
     "del": "^2.2.0",
+    "eslint": "^3.16.1",
     "eslint-config-warp": "^1.2.0",
     "extract-text-webpack-plugin": "^2.0.0",
     "file-loader": "^0.10.1",

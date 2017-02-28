@@ -5,7 +5,7 @@ import './dashboard.scss';
 
 const controller = function() {
   'ngInject';
-  
+
   this.name = 'dashboard';
 };
 

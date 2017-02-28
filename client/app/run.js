@@ -1,16 +1,16 @@
-import angular from 'angular';
 import {extend, has} from 'lodash';
 
 const run = ($rootScope, $state, $stateParams) => {
   'ngInject';
+
   $rootScope.$state = $state;
 
-  const previous = (fromState, fromParams) => extraParams => {
-    return $state.go(fromState.name || 'home', extend(fromParams, extraParams || {}));
-  };
+  const previous = (fromState, fromParams) => extraParams =>
+    $state.go(fromState.name || 'home', extend(fromParams, extraParams || {}));
 
-  $rootScope.$on('$stateChangeStart', function (e, toState, toParams) {
+  $rootScope.$on('$stateChangeStart', (e, toState, toParams) => {
     console.info('To state', toState.name);
+    //eslint-disable-next-line no-param-reassign
     $stateParams = extend($stateParams, toParams);
   });
 
@@ -23,7 +23,7 @@ const run = ($rootScope, $state, $stateParams) => {
     e.preventDefault();
     if(has(error, 'redirect')) {
       console.info('Redirecting to', error.redirect);
-      return $state.go(error.redirect, error.params || {});
+      $state.go(error.redirect, error.params || {});
     }
     console.error(error);
   });
