@@ -7,5 +7,5 @@ const bodyCleaningInjector = () => ({
   response: config => config.data,
 });
 
-angular.module('app.bodyCleaningInjector', []).factory('bodyCleaningInjector', bodyCleaningInjector);
+angular.module('app.factories.bodyCleaningInjector', []).factory('bodyCleaningInjector', bodyCleaningInjector);
 export default bodyCleaningInjector;

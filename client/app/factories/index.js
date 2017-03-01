@@ -5,8 +5,8 @@ import './bodyCleaningInjector';
 import './endpointInjector';
 
 const factories = angular.module('app.factories', [
-  'app.bodyCleaningInjector',
-  'app.endpointInjector',
+  'app.factories.bodyCleaningInjector',
+  'app.factories.endpointInjector',
 ]);
 
 export default factories;

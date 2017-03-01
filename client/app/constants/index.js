@@ -4,7 +4,7 @@ import angular from 'angular';
 import './endpoint';
 
 const constants = angular.module('app.constants', [
-  'app.endpoint',
+  'app.constants.endpoint',
 ]);
 
 export default constants;
