@@ -18,10 +18,6 @@ import historyApiFallback from 'connect-history-api-fallback';
 process.noDeprecation = true;
 //source code folder
 const root = 'client';
-const Environments = fs.readdirSync('./config')
-const getConfig = override => override
-  ? override
-  : process.env.NODE_ENV || (Environments.indexOf('local.js') !== -1 ? 'local' : 'development');
 
 // helper methods for resolving paths
 const pathTypes = {

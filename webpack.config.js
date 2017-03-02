@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+const ImageminPlugin = require('imagemin-webpack-plugin').default;
 
 module.exports = {
   devtool: 'sourcemap',
@@ -27,7 +28,10 @@ module.exports = {
               babelrc: false,
               compact: false,
               cacheDirectory: true,
-              presets: ['stage-0', ['es2015', {modules: false}]],
+              //presets: [
+              //  ['env', {targets: {browsers: ['last 2 versions']}}]
+              //],
+              presets: ['stage-0', ['es2015', {modules: false, loose: true}]],
               plugins: [
                 'syntax-decorators',
                 ['angularjs-annotate', {explicitOnly: true}],
@@ -51,7 +55,7 @@ module.exports = {
         ]
       },
       {
-        test: /\.(png|jpg)$/,
+        test: /\.(png|jpg|gif|svg)$/,
         use: [
           {loader: 'url-loader', options: {limit: 8192}},
         ]
@@ -63,7 +67,7 @@ module.exports = {
         ]
       },
       {
-        test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
         use: [
           {loader: 'file-loader'},
         ]
@@ -96,6 +100,15 @@ module.exports = {
         to: 'fonts'
       },
     ]),
+    new ImageminPlugin({
+      test: /\.(jpe?g|png|gif|svg)$/i,
+      pngquant: {
+        quality: '70-100'
+      },
+      svgo: {
+        removeViewBox: false
+      }
+    }),
 
     // Automatically move all modules defined outside of application directory to vendor bundle.
     // If you are using more complicated project structure, consider to specify common chunks manually.
