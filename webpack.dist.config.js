@@ -14,6 +14,8 @@ if(process.env.NODE_ENV && !['production', 'prototype'].includes(process.env.NOD
 
 const environment = require('./config')(process.env.NODE_ENV || 'production');
 
+console.log(environment);
+
 config.output = {
   filename: '[name].bundle.js',
   publicPath: '',

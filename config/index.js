@@ -8,9 +8,10 @@ const quote = obj => {
       obj[i] = `'${o}'`;
     }
     if(isArray(o) || isObject(o)) {
-      quote(o);
+      obj[i] = quote(o);
     }
   });
+  return obj;
 };
 
 module.exports = configEnv => {
