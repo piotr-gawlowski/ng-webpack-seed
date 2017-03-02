@@ -74,11 +74,12 @@ const generator = type => () => {
   const proto = yargs.argv.name.split('/');
   const name = _.last(proto);
   const typed = type !== 'factory' ? `${type}s` : 'factories';
-  const destPath = path.join(resolvePath(typed), yargs.argv.name);
+  const noFolder = ['service', 'factory', 'constant'];
+  const destPath = path.join(resolvePath(typed), (!noFolder.includes(type) ? proto : proto.slice(0, proto.length - 1)).join('/'));
   const scssPath = getRootLevel(resolvePath(typed) + `/${proto.join('/')}`);
 
   gulp.src(path.join(resolvePath(typed), 'index.js'), {base: './'})
-    .pipe(change(content => modulize(content, typed, name)))
+    .pipe(change(content => modulize(content, typed, (!noFolder.includes(type) ? name : null))))
     .pipe(gulp.dest('./'));
 
   return gulp.src(paths.blank(type))
