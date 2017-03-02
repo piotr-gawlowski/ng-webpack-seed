@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const config = require('./webpack.config');
+const environment = require('./config')();
 
 config.output = {
   filename: '[name].bundle.js',
@@ -9,7 +10,8 @@ config.output = {
 };
 
 config.plugins = config.plugins.concat([
-  new webpack.HotModuleReplacementPlugin()
+  new webpack.HotModuleReplacementPlugin(),
+  new webpack.DefinePlugin({environment})
 ]);
 
 module.exports = config;

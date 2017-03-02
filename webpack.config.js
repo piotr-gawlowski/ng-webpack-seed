@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 
 module.exports = {
   devtool: 'sourcemap',
@@ -18,10 +19,22 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        exclude: [/app\/lib/, /node_modules/],
+        //exclude: [/node_modules/],
         use: [
-          {loader: 'ng-annotate-loader'},
-          {loader: 'babel-loader'},
+          {
+            loader: 'babel-loader',
+            options: {
+              babelrc: false,
+              compact: false,
+              cacheDirectory: true,
+              presets: ['stage-0', ['es2015', {modules: false}]],
+              plugins: [
+                'syntax-decorators',
+                ['angularjs-annotate', {explicitOnly: true}],
+                'lodash'
+              ]
+            }
+          }
         ]
       },
       {
@@ -58,6 +71,7 @@ module.exports = {
     ]
   },
   plugins: [
+    new LodashModuleReplacementPlugin,
     new HtmlWebpackPlugin({
       template: 'client/index.html',
       inject: 'body',
@@ -88,7 +102,7 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
       minChunks: function (module) {
-        return module.resource && module.resource.indexOf(path.resolve(__dirname, 'client')) === -1;
+        return module.resource && module.resource.indexOf(path.resolve(__dirname, 'node_modules')) !== -1;
       }
     })
   ]

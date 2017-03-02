@@ -1,4 +1,4 @@
-import {each} from 'lodash';
+import {each} from 'lodash-es';
 
 const config = ($locationProvider, $stateProvider, $urlRouterProvider, $httpProvider) => {
   'ngInject';
@@ -10,4 +10,4 @@ const config = ($locationProvider, $stateProvider, $urlRouterProvider, $httpProv
   each(['endpointInjector', 'bodyCleaningInjector'], i => $httpProvider.interceptors.push(i));
 };
 
-module.exports = config;
+export default config;

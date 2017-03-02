@@ -1,4 +1,4 @@
-import {extend, has} from 'lodash';
+import {extend, has} from 'lodash-es';
 
 const run = ($rootScope, $state, $stateParams) => {
   'ngInject';
