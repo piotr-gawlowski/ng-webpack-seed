@@ -1,5 +1,5 @@
 import angular from 'angular';
-import {omit} from 'lodash';
+import {omit} from 'lodash-es';
 
 //This injector removes the _id from the request body, to prevent MongoDB errors when updating
 const bodyCleaningInjector = () => ({

@@ -10,3 +10,4 @@ dist/
 .idea
 client/lib
 .vscode
+config/local.js

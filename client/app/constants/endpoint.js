@@ -1,4 +1,5 @@
+/* global environment */
 import angular from 'angular';
 
-angular.module('app.constants.endpoint', []).constant('endpoint', 'http://localhost:3000');
+angular.module('app.constants.endpoint', []).constant('endpoint', environment.api);
 export default 'app.constants.endpoint';

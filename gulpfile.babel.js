@@ -6,6 +6,7 @@ import template from 'gulp-template';
 import change from 'gulp-change';
 import yargs from 'yargs';
 import _ from 'lodash';
+import fs from 'fs';
 import gutil from 'gulp-util';
 import serve from 'browser-sync';
 import del from 'del';
@@ -14,7 +15,13 @@ import webpachHotMiddelware from 'webpack-hot-middleware';
 import colorsSupported from 'supports-color';
 import historyApiFallback from 'connect-history-api-fallback';
 
+process.noDeprecation = true;
+//source code folder
 const root = 'client';
+const Environments = fs.readdirSync('./config')
+const getConfig = override => override
+  ? override
+  : process.env.NODE_ENV || (Environments.indexOf('local.js') !== -1 ? 'local' : 'development');
 
 // helper methods for resolving paths
 const pathTypes = {
@@ -90,7 +97,7 @@ const generator = type => () => {
 };
 
 //use webpack.config.js to build modules
-gulp.task('build', ['clean'], cb => {
+gulp.task('build', cb => {
   const config = require('./webpack.dist.config');
   config.entry.app = paths.entry;
 
