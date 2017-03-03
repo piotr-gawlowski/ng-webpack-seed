@@ -4,10 +4,6 @@ $fa-font-path: "/fonts" !default;
 
 @import "./constants";
 @import "./text";
-@import "./responsive";
-@import "./viewport";
-@import "./forms";
-
 
 body {
   background: $dark;
@@ -17,12 +13,6 @@ body {
   &.noscroll {
     overflow: hidden;
   }
-}
-
-.svg-filters {
-  position: absolute;
-  z-index: -1;
-  left:0; top: 0;
 }
 
 //simple bootstrap-like container

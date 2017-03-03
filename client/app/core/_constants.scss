@@ -20,9 +20,7 @@ $timing-short: 0.15s;
 $anim: cubic-bezier(0.7,0,0.3,1);
 
 $screen-xs:                  480px !default;
-//** Deprecated `$screen-xs-min` as of v3.2.0
 $screen-xs-min:              $screen-xs !default;
-//** Deprecated `$screen-phone` as of v3.0.1
 $screen-phone:               $screen-xs-min !default;
 
 // Small screen / tablet

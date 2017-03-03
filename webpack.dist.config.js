@@ -4,7 +4,6 @@ const config = require('./webpack.config');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const {findIndex} = require('lodash');
 const gutil = require('gulp-util');
-
 const printError = err => gutil.log(gutil.colors.bgRed(gutil.colors.white(err)));
 
 if(process.env.NODE_ENV && !['production', 'prototype'].includes(process.env.NODE_ENV)) {
