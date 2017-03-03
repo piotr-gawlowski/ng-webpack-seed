@@ -1,15 +1,22 @@
+//main sass file
+//import here all needed sass modules and styling
+
 //include icons
 $fa-font-path: "/fonts" !default;
-@import "../../../node_modules/font-awesome/scss/font-awesome.scss";
+@import "../../node_modules/font-awesome/scss/font-awesome.scss";
 
-@import "./constants";
-@import "./text";
+@import "./core/constants";
+@import "./core/text";
 
+html, body {
+  min-height: 100%;
+  height: 100%;
+}
 body {
   background: $dark;
   color: #fff;
-  //font-family: CentraleSansBook, sans-serif;
   overflow-y: scroll;
+  margin: 0;
   &.noscroll {
     overflow: hidden;
   }
@@ -52,6 +59,7 @@ body {
   position: relative;
 }
 .outlet-full {
+  display: flex;
   width: 100%; height: 100%;
   transition: all 0.5s ease;
   opacity: 1; transform: translateY(0);

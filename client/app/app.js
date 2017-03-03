@@ -1,7 +1,7 @@
 import angular from 'angular';
 import uiRouter from 'angular-ui-router';
 import ngAnimate from 'angular-animate';
-import AppComponent from './core/app.component';
+import './app.scss';
 
 //require modules
 import './services';
@@ -24,6 +24,5 @@ const dependencies = [
 ];
 
 angular.module('app', dependencies)
-  .component('app', AppComponent)
   .config(config)
   .run(run);
