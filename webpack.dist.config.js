@@ -50,6 +50,8 @@ config.plugins = config.plugins.concat([
       evaluate: true,
       if_return: true,
       join_vars: true,
+      collapse_vars: true,
+      reduce_vars: false
     },
     output: {
       comments: false,

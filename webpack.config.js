@@ -20,7 +20,7 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        //exclude: [/node_modules/],
+        exclude: [/node_modules/],
         use: [
           {
             loader: 'babel-loader',
@@ -112,11 +112,11 @@ module.exports = {
 
     // Automatically move all modules defined outside of application directory to vendor bundle.
     // If you are using more complicated project structure, consider to specify common chunks manually.
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      minChunks: function (module) {
-        return module.resource && module.resource.indexOf(path.resolve(__dirname, 'node_modules')) !== -1;
-      }
-    })
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: 'vendor',
+    //   minChunks: function (module) {
+    //     return module.resource && module.resource.indexOf(path.resolve(__dirname, 'node_modules')) !== -1;
+    //   }
+    // })
   ]
 };
