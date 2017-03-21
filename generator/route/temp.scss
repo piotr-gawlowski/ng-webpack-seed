@@ -2,4 +2,5 @@
 @import "<%= scssPath %>core/mixins";
 
 <%= name %> {
+  display: block; //or flex
 }

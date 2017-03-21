@@ -6,7 +6,9 @@ import './<%= name %>.scss';
 const controller = function() {
   'ngInject';
 
-  this.name = '<%= name %>';
+  this.$onInit = () => {
+    //bindings available here
+  };
 };
 
 const <%= name %>Component = {

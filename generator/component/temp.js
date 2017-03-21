@@ -8,7 +8,9 @@ const <%= nameCamelCase %>Component = {
   controller: function() {
     'ngInject';
 
-    this.name = '<%= name %>';
+    this.$onInit = () => {
+      //bindings available here
+    };
   },
   controllerAs: 'vm'
 };
