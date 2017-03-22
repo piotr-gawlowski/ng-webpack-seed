@@ -1,9 +1,9 @@
 import angular from 'angular';
 
-const <%= name %>Service = function() {
+const <%= nameCamelCase %>Service = function() {
   'ngInject';
 
 };
 
-angular.module('<%= APP %>.<%= name %>', []).service('<%= name %>', <%= name %>Service);
-export default <%= name %>Service;
+angular.module('<%= APP %>.<%= nameCamelCase %>', []).service('<%= nameCamelCase %>', <%= nameCamelCase %>Service);
+export default <%= nameCamelCase %>Service;

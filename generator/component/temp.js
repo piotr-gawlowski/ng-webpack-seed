@@ -8,10 +8,10 @@ const <%= nameCamelCase %>Component = {
   controller: function() {
     'ngInject';
 
-    this.name = '<%= name %>';
+    this.name = '<%= nameCamelCase %>';
   },
   controllerAs: 'vm'
 };
 
-angular.module('<%= APP %>.<%= name %>', []).component('<%= nameCamelCase %>', <%= nameCamelCase %>Component);
+angular.module('<%= APP %>.<%= nameCamelCase %>', []).component('<%= nameCamelCase %>', <%= nameCamelCase %>Component);
 export default <%= nameCamelCase %>Component;

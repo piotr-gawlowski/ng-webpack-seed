@@ -29,7 +29,6 @@ const pathTypes = {
   services: 'app/services'
 };
 const resolvePath = (type, glob = '') => path.join(root, pathTypes[type], glob);
-const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
 
 // map of all paths
 const paths = {
@@ -60,7 +59,7 @@ const modulize = (content, moduleGroup, module) => {
   const previous = content.substring(s, e);
 
   const imports = `\nimport './${yargs.argv.name}${module ? '/' + module : ''}';`;
-  const moduleDef = `  'app.${moduleGroup}.${module || yargs.argv.name}',`;
+  const moduleDef = `  'app.${moduleGroup}.${_.camelCase(module) || _.camelCase(yargs.argv.name)}',`;
 
   return `${start + imports + previous + moduleDef}\n${end}`;
 };
@@ -81,10 +80,11 @@ const generator = type => () => {
   return gulp.src(paths.blank(type))
     .pipe(template({
       name: name,
+      nameKebabCase: _.kebabCase(name),
       nameCamelCase: _.camelCase(name),
       scssPath: scssPath,
       APP: `app.${typed}`,
-      upCaseName: cap(name)
+      upCaseName: _.capitalize(name)
     }))
     .pipe(rename(path => {
       path.basename = path.basename.replace('temp', name);

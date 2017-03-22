@@ -6,22 +6,22 @@ import './<%= name %>.scss';
 const controller = function() {
   'ngInject';
 
-  this.name = '<%= name %>';
+  this.name = '<%= nameCamelCase %>';
 };
 
-const <%= name %>Component = {
+const <%= nameCamelCase %>Component = {
   bindings: {},
   routeOpts: {
-    name: '<%= name %>',
-    url: '/<%= name %>',
+    name: '<%= nameCamelCase %>',
+    url: '/<%= nameKebabCase %>',
     //componentBindings: [],
     //resolve: [],
-    pageTitle: '<%= name %>',
+    pageTitle: '<%= nameCamelCase %>',
   },
   template,
   controller,
   controllerAs: 'vm'
 };
 
-routeWrap(angular).module('<%= APP %>.<%= name %>', []).route('<%= name %>', <%= name %>Component);
-export default <%= name %>Component;
+routeWrap(angular).module('<%= APP %>.<%= nameCamelCase %>', []).route('<%= nameCamelCase %>', <%= nameCamelCase %>Component);
+export default <%= nameCamelCase %>Component;
