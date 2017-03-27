@@ -2,4 +2,8 @@
 @import "<%= scssPath %>core/mixins";
 
 <%= nameKebabCase %> {
+
+<%= name %> {
+  display: block; //or flex
+
 }

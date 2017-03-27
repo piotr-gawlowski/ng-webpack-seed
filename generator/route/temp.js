@@ -7,6 +7,11 @@ const controller = function() {
   'ngInject';
 
   this.name = '<%= nameCamelCase %>';
+
+  this.$onInit = () => {
+    //bindings available here
+  };
+  
 };
 
 const <%= nameCamelCase %>Component = {
