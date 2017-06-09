@@ -1,6 +1,6 @@
 import angular from 'angular';
 
-const <%= name %> = 'constant';
+const <%= nameCamelCase %> = 'constant';
 
-angular.module('<%= APP %>.<%= name %>', []).constant('<%= name %>', <%= name %>);
-export default <%= name %>;
+angular.module('<%= APP %>.<%= nameCamelCase %>', []).constant('<%= nameCamelCase %>', <%= nameCamelCase %>);
+export default <%= nameCamelCase %>;

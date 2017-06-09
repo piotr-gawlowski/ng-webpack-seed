@@ -1,9 +1,9 @@
 import angular from 'angular';
 
-const <%= name %> = function() {
+const <%= nameCamelCase %> = function() {
   'ngInject';
 
 };
 
-angular.module('<%= APP %>.<%= name %>', []).factory('<%= name %>', <%= name %>);
-export default <%= name %>;
+angular.module('<%= APP %>.<%= nameCamelCase %>', []).factory('<%= nameCamelCase %>', <%= nameCamelCase %>);
+export default <%= nameCamelCase %>;

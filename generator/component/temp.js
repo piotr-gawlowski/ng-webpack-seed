@@ -8,12 +8,15 @@ const <%= nameCamelCase %>Component = {
   controller: function() {
     'ngInject';
 
+    this.name = '<%= nameCamelCase %>';
+
     this.$onInit = () => {
       //bindings available here
     };
+
   },
   controllerAs: 'vm'
 };
 
-angular.module('<%= APP %>.<%= name %>', []).component('<%= nameCamelCase %>', <%= nameCamelCase %>Component);
+angular.module('<%= APP %>.<%= nameCamelCase %>', []).component('<%= nameCamelCase %>', <%= nameCamelCase %>Component);
 export default <%= nameCamelCase %>Component;

@@ -75,7 +75,6 @@ module.exports = {
     ]
   },
   plugins: [
-    new LodashModuleReplacementPlugin,
     new HtmlWebpackPlugin({
       template: 'client/index.html',
       inject: 'body',
