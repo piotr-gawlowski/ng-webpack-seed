@@ -1,7 +1,11 @@
 import {extend, has} from 'lodash-es';
 
-const run = ($rootScope, $state, $stateParams, $log) => {
+const run = ($rootScope, $state, $stateParams, $log, Resolver) => {
   'ngInject';
+
+  Resolver.add({
+    resolveSession: ['Session', Session => Session.check()]
+  });
 
   $rootScope.$state = $state;
 

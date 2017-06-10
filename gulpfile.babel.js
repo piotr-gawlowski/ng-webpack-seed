@@ -1,12 +1,6 @@
 import gulp from 'gulp';
 import webpack from 'webpack';
 import path from 'path';
-import rename from 'gulp-rename';
-import template from 'gulp-template';
-import change from 'gulp-change';
-import yargs from 'yargs';
-import _ from 'lodash';
-import fs from 'fs';
 import gutil from 'gulp-util';
 import serve from 'browser-sync';
 import del from 'del';
@@ -19,77 +13,12 @@ process.noDeprecation = true;
 //source code folder
 const root = 'client';
 
-// helper methods for resolving paths
-const pathTypes = {
-  app: 'app',
-  components: 'app/components',
-  constants: 'app/constants',
-  factories: 'app/factories',
-  routes: 'app/routes',
-  services: 'app/services'
-};
-const resolvePath = (type, glob = '') => path.join(root, pathTypes[type], glob);
-
 // map of all paths
 const paths = {
-  js: resolvePath('components', '**/*!(.spec.js).js'),
-  styl: resolvePath('app', '**/*.scss'),
-  html: [
-    resolvePath('app', '**/*.html'),
-    path.join(root, 'index.html')
-  ],
   entry: [
     'babel-polyfill',
     path.join(__dirname, root, 'app/app.js')
   ],
-  output: root,
-  blank: type => path.join(__dirname, 'generator', `${type}/**/*.**`)
-};
-
-//Generate path for scss files
-const getRootLevel = string => _.times(string.split('/').length - 1, '').join('../');
-
-//create imports for generated modules
-const modulize = (content, moduleGroup, module) => {
-
-  const s = content.indexOf('//IMPORTS') + '//IMPORTS'.length;
-  const e = content.indexOf(']);');
-  const start = content.substr(0, s);
-  const end = content.substring(e);
-  const previous = content.substring(s, e);
-
-  const imports = `\nimport './${yargs.argv.name}${module ? '/' + module : ''}';`;
-  const moduleDef = `  'app.${moduleGroup}.${_.camelCase(module) || _.camelCase(yargs.argv.name)}',`;
-
-  return `${start + imports + previous + moduleDef}\n${end}`;
-};
-
-//creates gulp task
-const generator = type => () => {
-  const proto = yargs.argv.name.split('/');
-  const name = _.last(proto);
-  const typed = type !== 'factory' ? `${type}s` : 'factories';
-  const noFolder = ['service', 'factory', 'constant'];
-  const destPath = path.join(resolvePath(typed), (!noFolder.includes(type) ? proto : proto.slice(0, proto.length - 1)).join('/'));
-  const scssPath = getRootLevel(resolvePath(typed) + `/${proto.join('/')}`);
-
-  gulp.src(path.join(resolvePath(typed), 'index.js'), {base: './'})
-    .pipe(change(content => modulize(content, typed, (!noFolder.includes(type) ? name : null))))
-    .pipe(gulp.dest('./'));
-
-  return gulp.src(paths.blank(type))
-    .pipe(template({
-      name: name,
-      nameKebabCase: _.kebabCase(name),
-      nameCamelCase: _.camelCase(name),
-      scssPath: scssPath,
-      APP: `app.${typed}`,
-      upCaseName: _.capitalize(name)
-    }))
-    .pipe(rename(path => {
-      path.basename = path.basename.replace('temp', name);
-    }))
-    .pipe(gulp.dest(destPath));
 };
 
 //use webpack.config.js to build modules
@@ -137,12 +66,6 @@ gulp.task('serve', () => {
     ]
   });
 });
-
-gulp.task('component', generator('component'));
-gulp.task('route', generator('route'));
-gulp.task('service', generator('service'));
-gulp.task('factory', generator('factory'));
-gulp.task('constant', generator('constant'));
 
 gulp.task('clean', (cb) => {
   del([paths.dest]).then(function (paths) {

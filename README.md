@@ -1,5 +1,6 @@
 # Install
 `npm install`
+`npm install -g ng1`
 
 # Development
 `gulp`
@@ -9,16 +10,16 @@
 
 
 # Generators
-You have 5 generators.
 
-`gulp component --name yourComponent`
+`ng1 component --name yourComponent`
 
-`gulp constant --name yourConstant`
+`ng1 constant --name yourConstant`
 
-`gulp factory --name yourFactory`
+`ng1 factory --name yourFactory`
 
-`gulp route --name yourRoute`
+`ng1 route --name yourRoute`
 
-`gulp service --name YourService`
+`ng1 service --name YourService`
 
 Generators will create new files/folders in appropriate place. They will also handle imports.
+If you opt to not install `ng1` globally, you can run `npm run ng1` instead (so for example `npm run ng1 service --name YourService`).
