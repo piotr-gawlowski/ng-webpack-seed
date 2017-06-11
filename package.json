@@ -3,10 +3,14 @@
   "version": "1.0.0",
   "description": "Starter for angular projects",
   "main": "gulpfile.babel.js",
+  "bin": {
+    "ng1": "./node_modules/.bin/ng1"
+  },
   "scripts": {
     "build": "gulp build",
     "dev": "gulp",
-    "start": "gulp"
+    "start": "gulp",
+    "ng1": "ng1"
   },
   "dependencies": {
     "angular": "^1.6.2",
@@ -38,13 +42,11 @@
     "file-loader": "^0.10.1",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^3.1.1",
-    "gulp-change": "^1.0.0",
-    "gulp-rename": "^1.2.2",
-    "gulp-template": "^4.0.0",
     "gulp-util": "^3.0.7",
     "html-webpack-plugin": "^2.26.0",
     "imagemin-webpack-plugin": "^1.4.4",
     "lodash-webpack-plugin": "^0.11.2",
+    "ng1": "^1.0.2",
     "node-sass": "^4.5.0",
     "raw-loader": "^0.5.1",
     "resolve-url-loader": "^2.0.0",
@@ -53,8 +55,7 @@
     "url-loader": "^0.5.8",
     "webpack": "^2.2.1",
     "webpack-dev-middleware": "^1.10.1",
-    "webpack-hot-middleware": "^2.17.1",
-    "yargs": "^6.6.0"
+    "webpack-hot-middleware": "^2.17.1"
   },
   "keywords": [
     "angular",
