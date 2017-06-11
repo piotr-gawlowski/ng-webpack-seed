@@ -1,5 +1,6 @@
 # Install
 `npm install`
+
 `npm install -g ng1`
 
 # Development
