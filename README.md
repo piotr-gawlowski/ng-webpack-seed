@@ -1,5 +1,6 @@
 # Install
 `npm install`
+
 `npm install -g ng1`
 
 # Usage
@@ -44,11 +45,11 @@ We advise to include states directly as much as possible, to keep the config fil
 ### Directly in generated routes
 ```
 const myComponent = {
-    bindings: {},
-    routeOpts: {
-        name: 'myStateName',
-        url: '/my-state-name',
-        pageTitle: 'myStateName',
+  bindings: {},
+  routeOpts: {
+    name: 'myStateName',
+    url: '/my-state-name',
+    pageTitle: 'myStateName',
   },
   template,
   controller,
